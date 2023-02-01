@@ -1,8 +1,13 @@
 package com.example.demo.services;
 
+import com.example.demo.exceptions.BadRequestException;
+import com.example.demo.exceptions.NotFoundException;
 import com.example.demo.mappers.PixDTOMapper;
+import com.example.demo.mappers.PixMapper;
+import com.example.demo.models.Client;
 import com.example.demo.models.Pix;
 import com.example.demo.dataTransferObjects.PixDTO;
+import com.example.demo.repositories.ClientRepository;
 import com.example.demo.repositories.PixRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,13 +24,20 @@ public class PixService {
 
     private final PixRepository pixRepository;
 
+    private final ClientRepository clientRepository;
+
     private final PixDTOMapper pixDTOMapper;
+
+    private final PixMapper pixMapper;
+
     private final Logger logger = LoggerFactory.getLogger(PixService.class);
 
     @Autowired
-    public PixService(PixRepository pixRepository, PixDTOMapper pixDTOMapper) {
+    public PixService(PixRepository pixRepository, ClientRepository clientRepository, PixDTOMapper pixDTOMapper, PixMapper pixMapper) {
         this.pixRepository = pixRepository;
+        this.clientRepository = clientRepository;
         this.pixDTOMapper = pixDTOMapper;
+        this.pixMapper = pixMapper;
     }
 
     public List<PixDTO> getAllPixs(Integer pageIndex) {
@@ -34,35 +45,39 @@ public class PixService {
         List<Pix> pixs = this.pixRepository.findByOrderByIdDesc(page);
         if (pixs.isEmpty()) {
             logger.info("No pixs");
-        } else {
-            return pixs.stream().map(pixDTOMapper).collect(Collectors.toList());
+            throw new NotFoundException("No pixs !");
         }
-        return null;
+        return pixs.stream().map(pixDTOMapper).collect(Collectors.toList());
     }
 
     public PixDTO getPixById(Long id) {
         Optional<Pix> opt = this.pixRepository.findById(id);
-        if (opt.isEmpty()) {
-            logger.info("Pix not found");
-        } else {
+        if (opt.isPresent()) {
             return pixDTOMapper.apply(opt.get());
         }
-        return null;
+        logger.info("Pix not found");
+        throw new NotFoundException("Pix not found");
     }
 
-    public Pix likePixById(Long id, Pix pix) {
-        if (pix.getId().equals(id)) {
-            logger.info("pix id: " + id + " has been updated");
-            this.pixRepository.save(pix);
+    public void likePixById(Long id) {
+        Optional<Pix> opt = pixRepository.findById(id);
+        if (opt.isPresent()) {
+            Integer likes = opt.get().getLikes();
+            opt.get().setLikes(likes + 1);
+            this.pixRepository.save(opt.get());
         }
-        return pix;
+        logger.info("Pix not found");
+        throw new NotFoundException("Pix not found");
     }
 
-    public Pix createPix(Pix pix) {
-        if (pix.getTitle() != null && pix.getCaption() != null && pix.getImageUrl() != null && pix.getLocation() != null) {
-            pix.setCreationDate(new Date());
-            this.pixRepository.save(pix);
+    public PixDTO createPix(PixDTO pixDTO) {
+        Optional<Client> opt = this.clientRepository.findById(pixDTO.clientId());
+        if (opt.isPresent()) {
+            Pix newPix = pixMapper.apply(pixDTO);
+            newPix.setClient(opt.get());
+            this.pixRepository.save(newPix);
+            return pixDTO;
         }
-        return pix;
+        throw new BadRequestException("Could not find the user");
     }
 }

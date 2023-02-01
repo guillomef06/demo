@@ -33,12 +33,12 @@ public class PixRestController {
     }
 
     @PutMapping("{id}")
-    public Pix likePixById(@PathVariable("id") Long id, @RequestBody Pix pix) {
-        return this.pixService.likePixById(id, pix);
+    public void likePixById(@PathVariable("id") Long id) {
+        this.pixService.likePixById(id);
     }
 
     @PostMapping("")
-    public Pix createPix(@RequestBody Pix pix) {
-        return this.pixService.createPix(pix);
+    public PixDTO createPix(@RequestBody PixDTO pixDTO) {
+        return this.pixService.createPix(pixDTO);
     }
 }

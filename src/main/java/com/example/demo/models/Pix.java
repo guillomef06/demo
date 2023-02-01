@@ -67,6 +67,15 @@ public class Pix {
         this.creationDate = new Date();
     }
 
+    public Pix(String title, String caption, String location, String imageUrl) {
+        this.title = title;
+        this.caption = caption;
+        this.location = location;
+        this.imageUrl = imageUrl;
+        this.likes = 0;
+        this.creationDate = new Date();
+    }
+
     public Long getId() {
         return id;
     }

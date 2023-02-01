@@ -11,13 +11,23 @@ import java.time.ZonedDateTime;
 @RestControllerAdvice
 public class ApiExceptionHandler {
 
-    @ExceptionHandler(value = {ApiResquestException.class})
+    @ExceptionHandler(value = {BadRequestException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ApiException handleApiRequestException(ApiResquestException e) {
+    public ApiException handleApiRequestException(BadRequestException e) {
         ApiException apiE = new ApiException(
                 e.getMessage(),
                 ZonedDateTime.now(ZoneId.of("Z"))
         );
         return apiE;
     };
+
+    @ExceptionHandler(value = {NotFoundException.class})
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    public ApiException handleNotFoundException(NotFoundException e) {
+        ApiException apiE = new ApiException(
+                e.getMessage(),
+                ZonedDateTime.now(ZoneId.of("Z"))
+        );
+        return apiE;
+    }
 }

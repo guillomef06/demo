@@ -154,7 +154,7 @@ public class Client {
                 ", email='" + email + '\'' +
                 ", bio='" + bio + '\'' +
                 ", dob=" + dob +
-                ", age=" + age +
+                ", age=" + getAge() +
                 '}';
     }
 }

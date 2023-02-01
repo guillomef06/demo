@@ -2,8 +2,9 @@ package com.example.demo.services;
 
 import com.example.demo.dataTransferObjects.TokenRO;
 import com.example.demo.dataTransferObjects.LoginRO;
+import com.example.demo.mappers.ClientMapper;
 import com.example.demo.models.Client;
-import com.example.demo.dataTransferObjects.RegisterRO;
+import com.example.demo.dataTransferObjects.RegisterDTO;
 import com.example.demo.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,23 +16,20 @@ public class ClientService {
 
     private final ClientRepository clientRepository;
 
+    private final ClientMapper clientMapper;
+
     @Autowired
-    public ClientService(ClientRepository clientRepository) {
+    public ClientService(ClientRepository clientRepository, ClientMapper clientMapper) {
         this.clientRepository = clientRepository;
+        this.clientMapper = clientMapper;
     }
 
-    public TokenRO registerNewClient(RegisterRO register) {
-        Optional<Client> clientEmail = clientRepository.findClientByEmail(register.getEmail());
+    public TokenRO registerNewClient(RegisterDTO register) {
+        Optional<Client> clientEmail = clientRepository.findClientByEmail(register.email());
         if (clientEmail.isPresent()) {
             throw new IllegalStateException();
         }
-        Client client = new Client(
-                register.getNickName(),
-                register.getEmail(),
-                register.getPassword(),
-                register.getBio(),
-                register.getDob()
-        );
+        Client client = clientMapper.apply(register);
         clientRepository.save(client);
         return new TokenRO("FakeToken");
     }

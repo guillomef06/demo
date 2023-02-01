@@ -2,7 +2,7 @@ package com.example.demo.api;
 
 import com.example.demo.dataTransferObjects.TokenRO;
 import com.example.demo.dataTransferObjects.LoginRO;
-import com.example.demo.dataTransferObjects.RegisterRO;
+import com.example.demo.dataTransferObjects.RegisterDTO;
 import com.example.demo.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +18,7 @@ public class AuthRestController {
     }
 
     @PostMapping("register")
-    public TokenRO register(@RequestBody RegisterRO register) {
+    public TokenRO register(@RequestBody RegisterDTO register) {
         return this.clientService.registerNewClient(register);
     }
 

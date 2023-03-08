@@ -30,4 +30,14 @@ public class ApiExceptionHandler {
         );
         return apiE;
     }
+
+    @ExceptionHandler(value = {ConflictException.class})
+    @ResponseStatus(value = HttpStatus.CONFLICT)
+    public ApiException handleConflictException(ConflictException e) {
+        ApiException apiE = new ApiException(
+                e.getMessage(),
+                ZonedDateTime.now(ZoneId.of("Z"))
+        );
+        return apiE;
+    }
 }

@@ -1,11 +1,11 @@
 package com.example.demo.api;
 
-import com.example.demo.models.Pix;
 import com.example.demo.dataTransferObjects.PixDTO;
 import com.example.demo.services.PixService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,8 +22,8 @@ public class PixRestController {
     @Autowired
     public PixRestController(PixService pixService) { this.pixService = pixService; }
 
-    @GetMapping("page/{page}")
-    public List<PixDTO> getAllPix(@PathVariable("page") Integer page) {
+    @GetMapping("")
+    public List<PixDTO> getAllPix(Pageable page) {
         return this.pixService.getAllPixs(page);
     }
 

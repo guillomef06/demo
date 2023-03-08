@@ -13,7 +13,7 @@ public class ClientMapper implements Function<RegisterDTO, Client> {
         return new Client(
                 registerDTO.nickName(),
                 registerDTO.email(),
-                registerDTO.password(),
+                null,
                 registerDTO.bio(),
                 registerDTO.dob());
     }

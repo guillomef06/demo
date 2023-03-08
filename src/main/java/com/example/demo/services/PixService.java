@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,8 +41,7 @@ public class PixService {
         this.pixMapper = pixMapper;
     }
 
-    public List<PixDTO> getAllPixs(Integer pageIndex) {
-        PageRequest page = PageRequest.of(0 + pageIndex,5);
+    public List<PixDTO> getAllPixs(Pageable page) {
         List<Pix> pixs = this.pixRepository.findByOrderByIdDesc(page);
         if (pixs.isEmpty()) {
             logger.info("No pixs");

@@ -3,7 +3,7 @@ package com.example.demo.api;
 import com.example.demo.dataTransferObjects.TokenRO;
 import com.example.demo.dataTransferObjects.LoginRO;
 import com.example.demo.dataTransferObjects.RegisterDTO;
-import com.example.demo.services.ClientService;
+import com.example.demo.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,19 +11,21 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "api/v1/auth/")
 @CrossOrigin("*")
 public class AuthRestController {
-    private final ClientService clientService;
+
+    private final AuthService authService;
+
     @Autowired
-    public AuthRestController(ClientService clientService) {
-        this.clientService = clientService;
+    public AuthRestController(AuthService authService) {
+        this.authService = authService;
     }
 
     @PostMapping("register")
     public TokenRO register(@RequestBody RegisterDTO register) {
-        return this.clientService.registerNewClient(register);
+        return this.authService.registerNewClient(register);
     }
 
     @PutMapping("login")
     public TokenRO login(@RequestBody LoginRO login) {
-        return this.clientService.loginClient(login);
+        return this.authService.loginClient(login);
     }
 }

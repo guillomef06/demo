@@ -5,6 +5,7 @@ import com.example.demo.dataTransferObjects.LoginRO;
 import com.example.demo.dataTransferObjects.RegisterDTO;
 import com.example.demo.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,6 +21,7 @@ public class AuthRestController {
     }
 
     @PostMapping("register")
+    @ResponseStatus(HttpStatus.CREATED)
     public TokenRO register(@RequestBody RegisterDTO register) {
         return this.authService.registerNewClient(register);
     }

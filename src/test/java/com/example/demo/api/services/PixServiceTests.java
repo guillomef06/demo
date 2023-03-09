@@ -1,35 +1,21 @@
 package com.example.demo.api.services;
 
 import com.example.demo.dataTransferObjects.PixDTO;
-import com.example.demo.mappers.PixDTOMapper;
-import com.example.demo.mappers.PixMapper;
-import com.example.demo.models.Client;
-import com.example.demo.models.Pix;
-import com.example.demo.repositories.ClientRepository;
-import com.example.demo.repositories.PixRepository;
 import com.example.demo.services.PixService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.time.LocalDate;
 import java.util.Date;
-import java.util.Optional;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.*;
 
-@ExtendWith(MockitoExtension.class)
+@ExtendWith(SpringExtension.class)
 public class PixServiceTests {
 
-    @Mock
-    private PixRepository pixRepository;
-
-    @InjectMocks
+    @MockBean
     private PixService pixService;
 
     @Test
@@ -44,13 +30,10 @@ public class PixServiceTests {
                 "http://someUrl.com/123.jpg",
                 new Date(),
                 0);
-        Pix pix = new Pix("Test", "Caption test", "Location", "http://someUrl.com/123.jpg");
-        pix.setId(1L);
-        when(pixRepository.findById(1L)).thenReturn(Optional.ofNullable(pix));
 
         //ACT
+        when(pixService.getPixById(1L)).thenReturn(pixDto);
         PixDTO saved = pixService.getPixById(1L);
-
         //ASSERT
         Assertions.assertNotNull(saved);
         Assertions.assertEquals(saved.title(), "Test");

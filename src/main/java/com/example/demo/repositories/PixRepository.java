@@ -10,7 +10,5 @@ import java.util.List;
 @Repository
 public interface PixRepository extends JpaRepository<Pix, Long> {
 
-    public List<Pix> findByOrderByIdDesc();
-
-    public List<Pix> findByOrderByIdDesc(Pageable pageable);
+    List<Pix> findByOrderByIdDesc(Pageable pageable);
 }

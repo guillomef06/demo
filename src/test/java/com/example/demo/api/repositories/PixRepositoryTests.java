@@ -15,7 +15,7 @@ import java.util.List;
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 public class PixRepositoryTests {
 
-    private PixRepository pixRepository;
+    private final PixRepository pixRepository;
 
     @Autowired
     public PixRepositoryTests(PixRepository pixRepository) {
@@ -41,8 +41,8 @@ public class PixRepositoryTests {
         Pix pix1 = new Pix("Test1","Caption test", "caption location", "http://somurl.123.jpg");
         Pix pix2 = new Pix("Test2","Caption test", "caption location", "http://somurl.123.jpg");
 
-        Pix saved1 = pixRepository.save(pix1);
-        Pix saved2 = pixRepository.save(pix2);
+        pixRepository.save(pix1);
+        pixRepository.save(pix2);
 
         //ACT
         List<Pix> saved= pixRepository.findAll();

@@ -66,7 +66,7 @@ public class AuthService {
         if (opt.isEmpty()) {
             throw new BadRequestException("Connection failed");
         }
-        logger.info("Client:" + opt.get().toString() + " connection succesful");
+        logger.info("Client:" + opt.get() + " connection succesful");
         return new TokenRO(jwtService.generateToken(new ClientDetails(opt.get())));
     }
 }

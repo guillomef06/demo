@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +26,7 @@ public class PixRestController {
     public PixRestController(PixService pixService) { this.pixService = pixService; }
 
     @GetMapping("")
-    public List<PixDTO> getAllPix(Pageable page) {
+    public List<PixDTO> getAllPix(@PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable page) {
         return this.pixService.getAllPixs(page);
     }
 
